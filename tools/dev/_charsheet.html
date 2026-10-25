@@ -1,0 +1,5 @@
+<html><body style="margin:0;background:#f4ecdf"><div id=g style="display:flex;flex-wrap:wrap;width:1600px"></div>
+<script src="../../engine/characters.js"></script><script>
+const q=new URLSearchParams(location.search); const items=JSON.parse(q.get('items'));
+for(const it of items){const d=document.createElement('div');d.style.cssText=`width:${it.w||200}px;height:${(it.w||200)*1.6}px;position:relative`;d.innerHTML=(it.avatar?CHAR.avatarSVG(it):CHAR.charSVG(it))+`<div style="position:absolute;bottom:2px;left:4px;font:12px sans-serif">${it.who||''} ${it.expr||''} ${it.pose||''}</div>`;g.appendChild(d)}
+</script></body></html>

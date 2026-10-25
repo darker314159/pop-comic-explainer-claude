@@ -1,0 +1,6 @@
+{
+  "mimo_api_key": "sk-把你的小米Key填这里（或运行 python3 tools/setup_mimo.py sk-xxx 自动生成 config.json）",
+  "mimo_voice": "苏打",
+  "mimo_style": "抖音爆款知识口播博主，年轻有磁性的声音，语速偏快、节奏利落，情绪饱满有感染力；关键词加重语气，不要播音腔。",
+  "mimo_model": "mimo-v2.5-tts"
+}

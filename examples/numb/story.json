@@ -1,0 +1,353 @@
+{
+ "meta": {
+  "topic": "情感拆解",
+  "voice": "苏打",
+  "bgm": "auto"
+ },
+ "scenes": [
+  {
+   "title": "搞定的越多",
+   "lines": [
+    "你搞定的女生越多",
+    "对女人就越容易变得[麻木]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "expr": "smile",
+     "acts": [
+      {
+       "at": "w:麻木",
+       "expr": "numb"
+      }
+     ]
+    },
+    {
+     "type": "avatars",
+     "layout": "arc",
+     "count": 14,
+     "at": 0.4,
+     "x": 540,
+     "y": 760,
+     "radius": 340
+    },
+    {
+     "type": "counter",
+     "text": "搞定 ×{n}",
+     "from": 1,
+     "to": 17,
+     "at": 0.4,
+     "dur": 1.6,
+     "x": 830,
+     "y": 1210
+    }
+   ]
+  },
+  {
+   "title": "在她们面前",
+   "bg": "cream-blue",
+   "lines": [
+    "因为你终于可以在她们面前",
+    "不那么在意[结果]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "expr": "cool",
+     "pose": "cross"
+    },
+    {
+     "type": "tag",
+     "text": "不在意结果",
+     "icon": "check",
+     "color": "white",
+     "at": "L1+0.6"
+    },
+    {
+     "type": "tag",
+     "text": "淡定",
+     "color": "blue",
+     "at": "L2",
+     "loop": "float"
+    },
+    {
+     "type": "onoma",
+     "text": "CHILL~",
+     "color": "green",
+     "at": "w:结果",
+     "size": 90
+    }
+   ]
+  },
+  {
+   "title": "她只是",
+   "title2": "[放大]给你看",
+   "lines": [
+    "可她只是把你原本就不稳的[价值系统]",
+    "放大给你看"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy2",
+     "expr": "neutral",
+     "size": "L",
+     "acts": [
+      {
+       "at": "L2",
+       "expr": "scared"
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "name": "magnifier",
+     "size": 300,
+     "x": 700,
+     "y": 980,
+     "at": "L1+0.4",
+     "enter": "slide-right"
+    },
+    {
+     "type": "tag",
+     "text": "匮乏",
+     "color": "red",
+     "at": "L2+0.2",
+     "pos": "mid-left"
+    },
+    {
+     "type": "tag",
+     "text": "羞耻",
+     "color": "pink",
+     "at": "L2+0.5",
+     "pos": "upper-right"
+    },
+    {
+     "type": "tag",
+     "text": "自证冲动",
+     "color": "yellow",
+     "at": "L2+0.4",
+     "pos": "low-left"
+    }
+   ]
+  },
+  {
+   "title": "真正不错的她",
+   "bg": "light-pink",
+   "punch": [
+    "w:不错"
+   ],
+   "lines": [
+    "等真正[不错]的女生出现"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "pos": "left",
+     "expr": "bored"
+    },
+    {
+     "type": "char",
+     "who": "girl",
+     "pos": "right",
+     "expr": "smile",
+     "at": 0.3,
+     "enter": "pop",
+     "id": "g"
+    },
+    {
+     "type": "burst",
+     "text": "",
+     "color": "yellow",
+     "w": 520,
+     "x": 790,
+     "y": 900,
+     "z": 3,
+     "at": 0.25,
+     "sfx": false
+    },
+    {
+     "type": "progress",
+     "label": "情感连接中…",
+     "from": 0,
+     "to": 12,
+     "color": "pink",
+     "y": 560,
+     "at": 0.6,
+     "w": 700
+    },
+    {
+     "type": "tag",
+     "text": "真正不错",
+     "color": "pink",
+     "pos": "head-right",
+     "of": "g",
+     "at": "w:不错",
+     "dy": 230,
+     "dx": -130
+    }
+   ]
+  },
+  {
+   "title": "几乎一样",
+   "lines": [
+    "你用几乎一样的说法、语气和时机"
+   ],
+   "elements": [
+    {
+     "type": "card",
+     "title": "告白模板",
+     "badge": "COPY #30",
+     "w": 760,
+     "y": 820,
+     "items": [
+      {
+       "text": "说法 —— [几乎一样]",
+       "check": true,
+       "at": "w:说法"
+      },
+      {
+       "text": "语气 —— [几乎一样]",
+       "check": true,
+       "at": "w:语气"
+      },
+      {
+       "text": "时机 —— [几乎一样]",
+       "check": true,
+       "at": "w:时机"
+      }
+     ]
+    },
+    {
+     "type": "stamp",
+     "text": "第30次",
+     "at": "end-0.6",
+     "x": 760,
+     "y": 1150,
+     "rot": -12
+    }
+   ]
+  },
+  {
+   "title": "很强的[自由感]",
+   "bg": "green",
+   "lines": [
+    "你以为这是成长",
+    "其实只是一种很强的[自由感]"
+   ],
+   "elements": [
+    {
+     "type": "icon",
+     "name": "cage",
+     "size": 380,
+     "x": 330,
+     "y": 1000,
+     "at": 0.2
+    },
+    {
+     "type": "char",
+     "who": "girl4",
+     "pos": "right",
+     "size": "M",
+     "expr": "laugh",
+     "pose": "cheer",
+     "at": 0.4
+    },
+    {
+     "type": "onoma",
+     "text": "FREE!",
+     "color": "yellow",
+     "x": 820,
+     "y": 560,
+     "at": "w:自由感",
+     "rot": -8
+    },
+    {
+     "type": "particles",
+     "kind": "stars",
+     "x": 780,
+     "y": 900,
+     "count": 7,
+     "at": 0.6
+    }
+   ]
+  },
+  {
+   "title": "她不是让你[自卑]",
+   "bg": "dark",
+   "lines": [
+    "她不是让你[自卑]",
+    "她只是让你看见自己"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "silhouette": true,
+     "expr": "sad"
+    },
+    {
+     "type": "spotlight",
+     "x": 540,
+     "y": 1000,
+     "r": 380,
+     "at": 0.1
+    },
+    {
+     "type": "bubble",
+     "text": "我配吗？",
+     "style": "thought",
+     "pos": "head-right",
+     "at": "L2",
+     "tail": "bl"
+    }
+   ]
+  },
+  {
+   "title": "麻木换来自由",
+   "title2": "也拿走[心动]",
+   "bg": "yellow sun",
+   "lines": [
+    "麻木换来了自由",
+    "也拿走了[心动]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "expr": "smile",
+     "pose": "heart",
+     "size": "L"
+    },
+    {
+     "type": "tag",
+     "text": "越经历 越难心动",
+     "color": "white",
+     "y": 1290,
+     "x": 540,
+     "at": "L2"
+    },
+    {
+     "type": "avatar",
+     "who": "girl",
+     "x": 170,
+     "y": 760,
+     "at": "L1+0.3",
+     "loop": "float"
+    },
+    {
+     "type": "avatar",
+     "who": "girl3",
+     "x": 910,
+     "y": 820,
+     "at": "L1+0.6",
+     "loop": "float",
+     "ring": "pink"
+    }
+   ]
+  }
+ ]
+}

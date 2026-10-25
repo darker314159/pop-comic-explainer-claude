@@ -1,0 +1,494 @@
+{
+ "meta": {
+  "topic": "心理拆解",
+  "voice": "苏打",
+  "bgm": "auto"
+ },
+ "scenes": [
+  {
+   "title": "越讨好越廉价",
+   "lines": [
+    "你有没有发现",
+    "你对别人越好",
+    "别人越不[珍惜]你"
+   ],
+   "punch": "w:珍惜",
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl3",
+     "expr": "smile",
+     "acts": [
+      {
+       "at": "L2",
+       "expr": "happy",
+       "pose": "heart"
+      },
+      {
+       "at": "w:珍惜",
+       "expr": "sad",
+       "pose": "down"
+      }
+     ]
+    },
+    {
+     "type": "tag",
+     "text": "有求必应",
+     "color": "yellow",
+     "pos": "head-left",
+     "at": "L2"
+    },
+    {
+     "type": "tag",
+     "text": "不珍惜",
+     "color": "red",
+     "pos": "head-right",
+     "at": "w:珍惜",
+     "enter": "stamp"
+    },
+    {
+     "type": "particles",
+     "kind": "broken",
+     "count": 5,
+     "x": 540,
+     "y": 1150,
+     "spread": 600,
+     "at": "w:珍惜"
+    }
+   ]
+  },
+  {
+   "title": "随叫随到",
+   "bg": "light-pink",
+   "lines": [
+    "明明你随叫随到",
+    "却总被当成[备胎]"
+   ],
+   "elements": [
+    {
+     "type": "chat",
+     "title": "TA",
+     "w": 640,
+     "y": 840,
+     "items": [
+      {
+       "side": "l",
+       "text": "在吗 帮个忙",
+       "at": 0.3
+      },
+      {
+       "side": "r",
+       "text": "好的马上来！",
+       "at": 0.9
+      },
+      {
+       "side": "l",
+       "text": "你人真好",
+       "at": "L2"
+      }
+     ]
+    },
+    {
+     "type": "stamp",
+     "text": "备胎",
+     "x": 820,
+     "y": 1240,
+     "rot": -12,
+     "at": "w:备胎"
+    }
+   ]
+  },
+  {
+   "title": "不是你不好",
+   "title2": "是给得[太容易]",
+   "bg": "yellow",
+   "lines": [
+    "这不是你不够好",
+    "而是你给得[太容易]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl3",
+     "pos": "left",
+     "size": "M",
+     "expr": "sad",
+     "acts": [
+      {
+       "at": "w:太容易",
+       "expr": "shock"
+      }
+     ]
+    },
+    {
+     "type": "cross",
+     "size": 200,
+     "x": 790,
+     "y": 640,
+     "at": 0.4
+    },
+    {
+     "type": "tag",
+     "text": "给得太容易",
+     "color": "red",
+     "x": 790,
+     "y": 1000,
+     "at": "w:太容易",
+     "enter": "stamp"
+    }
+   ]
+  },
+  {
+   "title": "太容易得到",
+   "bg": "cream-yellow",
+   "lines": [
+    "人性就是这样",
+    "太容易得到的东西",
+    "就不会被[珍惜]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "pos": "left",
+     "size": "M",
+     "expr": "neutral",
+     "acts": [
+      {
+       "at": "L3",
+       "expr": "bored",
+       "pose": "shrug"
+      }
+     ]
+    },
+    {
+     "type": "pricetag",
+     "text": "¥0",
+     "sub": "FREE",
+     "color": "yellow",
+     "w": 280,
+     "x": 800,
+     "y": 520,
+     "at": "L2"
+    },
+    {
+     "type": "tag",
+     "text": "随便拿",
+     "color": "red",
+     "x": 800,
+     "y": 1200,
+     "at": "w:珍惜"
+    }
+   ]
+  },
+  {
+   "title": "理所当然",
+   "bg": "light-blue",
+   "lines": [
+    "你的每一次付出",
+    "都在变成[理所当然]"
+   ],
+   "elements": [
+    {
+     "type": "progress",
+     "label": "你的付出",
+     "from": 20,
+     "to": 95,
+     "dur": 1.5,
+     "color": "green",
+     "y": 560,
+     "w": 800,
+     "at": 0.2
+    },
+    {
+     "type": "progress",
+     "label": "TA的感激",
+     "from": 80,
+     "to": 5,
+     "dur": 1.5,
+     "color": "yellow",
+     "colorTo": "red",
+     "warnBelow": 30,
+     "y": 760,
+     "w": 800,
+     "at": "L2"
+    },
+    {
+     "type": "char",
+     "who": "girl3",
+     "size": "M",
+     "expr": "tired",
+     "y": 1540,
+     "acts": [
+      {
+       "at": "w:理所当然",
+       "expr": "cry"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "title": "讨好的真相",
+   "bg": "dark",
+   "lines": [
+    "更扎心的是",
+    "你不是真的善良",
+    "你是害怕被[抛弃]"
+   ],
+   "flash": "w:抛弃",
+   "elements": [
+    {
+     "type": "spotlight",
+     "x": 540,
+     "y": 900,
+     "r": 330
+    },
+    {
+     "type": "char",
+     "who": "girl3",
+     "silhouette": true,
+     "acts": [
+      {
+       "at": "w:抛弃",
+       "silhouette": false,
+       "expr": "scared"
+      }
+     ]
+    },
+    {
+     "type": "tag",
+     "text": "怕被抛弃",
+     "color": "red",
+     "pos": "head-right",
+     "at": "w:抛弃+0.2",
+     "enter": "stamp"
+    }
+   ]
+  },
+  {
+   "title": "讨好型人格",
+   "bg": "cream",
+   "lines": [
+    "不敢拒绝",
+    "不敢表达",
+    "还总在[道歉]"
+   ],
+   "elements": [
+    {
+     "type": "card",
+     "title": "讨好型人格",
+     "badge": "CHECK",
+     "color": "pink",
+     "w": 760,
+     "y": 700,
+     "items": [
+      {
+       "text": "不敢拒绝",
+       "check": false,
+       "at": "L1"
+      },
+      {
+       "text": "不敢表达",
+       "check": false,
+       "at": "L2"
+      },
+      {
+       "text": "总在[道歉]",
+       "check": false,
+       "at": "L3"
+      }
+     ]
+    },
+    {
+     "type": "char",
+     "who": "girl3",
+     "size": "S",
+     "x": 820,
+     "y": 1480,
+     "expr": "sweat"
+    },
+    {
+     "type": "bubble",
+     "text": "对不起…",
+     "x": 330,
+     "y": 1180,
+     "tail": "br",
+     "at": "w:道歉",
+     "size": 40
+    }
+   ]
+  },
+  {
+   "title": "越怕越失去",
+   "bg": "cream-blue",
+   "lines": [
+    "可你越害怕失去",
+    "就越会[失去]"
+   ],
+   "elements": [
+    {
+     "type": "icon",
+     "name": "mask",
+     "size": 240,
+     "x": 260,
+     "y": 780,
+     "at": 0.2,
+     "label": "讨好"
+    },
+    {
+     "type": "arrow",
+     "from": [
+      410,
+      780
+     ],
+     "to": [
+      680,
+      780
+     ],
+     "curve": -0.3,
+     "at": "L2"
+    },
+    {
+     "type": "icon",
+     "name": "broken_heart",
+     "size": 240,
+     "x": 820,
+     "y": 780,
+     "at": "w:失去",
+     "label": "失去"
+    },
+    {
+     "type": "char",
+     "who": "girl3",
+     "size": "S",
+     "expr": "sad",
+     "y": 1460
+    }
+   ]
+  },
+  {
+   "title": "学会拒绝",
+   "bg": "light-green",
+   "lines": [
+    "那怎么办？",
+    "真正好的关系",
+    "经得起一次[拒绝]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl3",
+     "pos": "left",
+     "size": "M",
+     "expr": "neutral",
+     "pose": "down",
+     "acts": [
+      {
+       "at": "w:拒绝",
+       "expr": "cool",
+       "pose": "cross"
+      }
+     ]
+    },
+    {
+     "type": "check",
+     "size": 230,
+     "x": 800,
+     "y": 700,
+     "at": "w:拒绝"
+    },
+    {
+     "type": "tag",
+     "text": "敢说不",
+     "icon": "shield",
+     "color": "white",
+     "x": 800,
+     "y": 1000,
+     "at": "w:拒绝+0.3"
+    }
+   ]
+  },
+  {
+   "title": "记住这句话",
+   "bg": "red rays",
+   "lines": [
+    "先爱你自己",
+    "别人才会[爱你]"
+   ],
+   "punch": "w:爱你",
+   "flash": "w:爱你",
+   "elements": [
+    {
+     "type": "burst",
+     "text": "爱自己",
+     "sub": "SELF LOVE",
+     "color": "white",
+     "textColor": "red",
+     "w": 720,
+     "x": 540,
+     "y": 860,
+     "at": "w:爱你",
+     "enter": "slam"
+    },
+    {
+     "type": "avatar",
+     "who": "girl3",
+     "expr": "happy",
+     "size": 170,
+     "x": 540,
+     "y": 860,
+     "at": 0.2,
+     "out": "w:爱你"
+    },
+    {
+     "type": "onoma",
+     "text": "POW!",
+     "color": "yellow",
+     "x": 840,
+     "y": 1270,
+     "at": "w:爱你+0.2"
+    }
+   ]
+  },
+  {
+   "title": "先问问自己",
+   "bg": "pink sun",
+   "lines": [
+    "下次想说好的时候",
+    "先问问[自己]愿不愿意"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl3",
+     "expr": "think",
+     "pose": "chin",
+     "acts": [
+      {
+       "at": "w:自己",
+       "expr": "smile",
+       "pose": "heart"
+      }
+     ]
+    },
+    {
+     "type": "bubble",
+     "style": "thought",
+     "text": "我愿意吗？",
+     "pos": "head-right",
+     "at": "L1+0.5"
+    },
+    {
+     "type": "tag",
+     "text": "关注我",
+     "icon": "heart",
+     "color": "yellow",
+     "pos": "head-left",
+     "at": "L2",
+     "loop": "pulse"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="theme.css"></head>
+<body><div id="stage"></div>
+<script src="characters.js"></script><script src="icons.js"></script><script src="comps.js"></script><script src="engine.js"></script>
+<script>
+// story/timing are injected by tools/render.py (window.__STORY__/__TIMING__) or loaded from ?story=path
+window.__ready = (async () => {
+  let story = window.__STORY__, timing = window.__TIMING__ || null;
+  const q = new URLSearchParams(location.search);
+  if (!story && q.get('story')) story = await (await fetch(q.get('story'))).json();
+  if (!timing && q.get('timing')) { try { timing = await (await fetch(q.get('timing'))).json(); } catch (e) {} }
+  await document.fonts.load('124px HuangYou', '测试'); await document.fonts.load('58px NotoBlack', '测试');
+  await document.fonts.load('100px Archivo', '01'); await document.fonts.load('100px Bangers', 'POW'); await document.fonts.load('40px Smiley', '测试'); await document.fonts.load('40px KuaiLe', '测试');
+  const info = POP.init(story, timing);
+  if (q.get('t')) POP.seek(parseFloat(q.get('t')));
+  return info;
+})();
+</script></body></html>
