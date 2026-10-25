@@ -19,6 +19,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
 .bg .grid{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.07) 2.4px,transparent 3px);background-size:24px 24px}
 .bg .rays{position:absolute;left:-600px;top:-500px;width:2280px;height:2400px;background:repeating-conic-gradient(from 0deg at 50% 50%,var(--rayc) 0deg 4deg,transparent 4deg 12deg);opacity:.55}
 .bg .sun{position:absolute;left:-700px;top:-600px;width:2480px;height:2600px;background:repeating-conic-gradient(from 0deg at 50% 50%,var(--sun1) 0deg 10deg,var(--sun2) 10deg 20deg)}
+.bg .haze{position:absolute;left:0;top:0;width:1080px;height:1404px;pointer-events:none}
 .bg .paper{position:absolute;inset:0;opacity:.35;background-image:radial-gradient(rgba(0,0,0,.05) 1px,transparent 1.2px);background-size:7px 7px}
 /* bottom subtitle panel */
 #panel{position:absolute;left:0;top:1404px;width:1080px;height:516px;background:#1f1d22}

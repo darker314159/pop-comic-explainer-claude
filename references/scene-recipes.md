@@ -39,6 +39,16 @@
 | R30 | 总结·金句 | 最后的结论 |
 | R31 | 结尾·关注贴纸（可选） | 用户要求加关注引导时 |
 | R32 | 图片素材 | 有真实截图/AI 生成插画时 |
+| R33 | 场景·深夜手机 | 深夜/失眠/等消息 |
+| R34 | 场景·职场 | 老板/加班/同事/职场 |
+| R35 | 道具·递送 | 送礼/付出/给予（物品从 A 到 B） |
+| R36 | 道具·变形 | 感情变淡/东西坏掉/状态变化 |
+| R37 | 意象·放手 | 放下/告别/释怀 |
+| R38 | 意象·冰山 | 表面 vs 深层原因 |
+| R39 | 意象·被操控 | 控制/PUA/被拿捏 |
+| R40 | 场景·选择 | 选择/纠结/岔路 |
+| R41 | 意象·失衡 | 付出与回报不对等 |
+| R42 | 意象·成长 | 成长/改变/慢慢变好 |
 
 ## 节奏搭配建议
 
@@ -46,6 +56,8 @@
 - 开头钩子：R01/R02/R03 选一个 → R04/R05（核心判断）
 - 中段：原因/机制用"概念"模板(R11~R26)，案例用"情绪/对话"模板(R04~R10、R21 聊天、R22 照片墙、R29 深夜)，两类交替；转折用 R27 反转，因果用 R26
 - 爆点：R23 金句爆炸 或 R24 大数字 + punch；结尾：R30 金句回应开头（R31 关注贴纸可选）
+- **画面要跟着文案走**：说到地点就换 set（R33/R34/R40），说到物品就让它出现（R35），说到比喻就画成道具（R38/R39/R41），说到变化就让道具变形或移动（R36/R37/R42）。
+- 全片建议：≥ 1/3 场景用 set、≥ 1/2 场景有道具主视觉、≥ 3 个场景有 move/acts 动作。
 - 长的清单型视频才用 R28 PART 卡分段。
 - 背景色轮换：cream → light-* → 彩色(yellow/pink/…) → cream，深色(dark/navy) 只给"真相/深夜/孤独"类场景。
 
@@ -139,13 +151,13 @@
 ```json
 {
   "title": "一句话破防",
-  "bg": "cream-blue",
+  "set": "cafe",
   "lines": ["他随口一句", "[你变了]", "她立刻就破防了"],
   "elements": [
     {"type": "char", "who": "guy", "id": "a", "pos": "left", "expr": "bored"},
     {"type": "char", "who": "girl2", "id": "b", "pos": "right", "flip": true, "expr": "smile", "acts": [{"at": "L3", "expr": "angry"}]},
     {"type": "bubble", "text": "你变了", "of": "a", "pos": "head-top", "tail": "bottom", "at": "L2"},
-    {"type": "onoma", "text": "BOOM!", "color": "red", "x": 800, "y": 560, "at": "L3", "enter": "slam"}
+    {"type": "onoma", "text": "BOOM!", "color": "red", "x": 540, "y": 1180, "size": 100, "at": "L3", "enter": "slam"}
   ]
 }
 ```
@@ -579,3 +591,168 @@
 }
 ```
 > 💡 src 相对 story.json 所在文件夹。frame:true = 黑边相框；默认是"贴纸描边"（适合透明底 PNG）。
+
+## R33 场景·深夜手机
+**适用**：深夜/失眠/等消息
+
+```json
+{
+  "title": "凌晨两点",
+  "set": "bedroom_night",
+  "lines": ["凌晨两点", "你又在等他的[消息]"],
+  "elements": [
+    {"type": "char", "who": "girl3", "pose": "phone", "expr": "tired", "pos": "center-left", "acts": [{"at": "w:消息", "expr": "sad"}]},
+    {"type": "icon", "name": "phone", "size": 190, "x": 830, "y": 760, "at": "L1+0.3", "loop": "wiggle"},
+    {"type": "particles", "kind": "zzz", "count": 3, "x": 820, "y": 600, "spread": 200, "at": 0.4}
+  ]
+}
+```
+> 💡 set 自带台灯/月亮/床，角色站中间偏左，右边留给道具。set 会把标题自动换成适合深色底的白字。
+
+## R34 场景·职场
+**适用**：老板/加班/同事/职场
+
+```json
+{
+  "title": "又要加班",
+  "set": "office",
+  "lines": ["老板一句话", "你的周末就[没了]"],
+  "elements": [
+    {"type": "char", "who": "boss", "pos": "left", "size": "M", "expr": "smug", "pose": "point", "id": "b"},
+    {"type": "char", "who": "guy", "pos": "right", "size": "M", "expr": "neutral", "id": "g", "acts": [{"at": "w:没了", "expr": "cry"}]},
+    {"type": "bubble", "text": "今晚加个班", "of": "b", "pos": "head-top", "at": 0.4, "tail": "bottom"},
+    {"type": "icon", "name": "calendar", "size": 150, "x": 820, "y": 560, "at": "w:没了", "enter": "stamp"}
+  ]
+}
+```
+
+## R35 道具·递送
+**适用**：送礼/付出/给予（物品从 A 到 B）
+
+```json
+{
+  "title": "你的付出",
+  "set": "date",
+  "lines": ["你送出的[礼物]", "他看都没看一眼"],
+  "elements": [
+    {"type": "char", "who": "guy2", "pos": "right", "size": "M", "expr": "bored", "acts": [{"at": "L2", "look": 1}]},
+    {"type": "icon", "name": "gift", "size": 180, "x": 160, "y": 1000, "at": 0.15, "move": {"to": [600, 900], "at": "w:礼物", "dur": 0.6, "arc": 140}},
+    {"type": "tag", "text": "已读不回", "color": "grey", "x": 300, "y": 640, "at": "L2+0.2"}
+  ]
+}
+```
+> 💡 "move" 让道具沿弧线飞到目标点：to 终点坐标、at 何时出发、dur 时长、arc 弧高、rot 旋转、scale 缩放。可写数组串起多段动作。
+
+## R36 道具·变形
+**适用**：感情变淡/东西坏掉/状态变化
+
+```json
+{
+  "title": "慢慢枯萎",
+  "set": "rain_window",
+  "lines": ["再热烈的感情", "也会慢慢[枯萎]"],
+  "elements": [
+    {"type": "icon", "name": "rose", "size": 360, "x": 540, "y": 860, "at": 0.2, "acts": [{"at": "w:枯萎", "name": "wilted_rose"}]},
+    {"type": "particles", "kind": "broken", "count": 4, "x": 540, "y": 900, "spread": 500, "at": "w:枯萎"}
+  ]
+}
+```
+> 💡 非角色元素的 "acts" = 在某个时刻换属性（icon 换 name、tag 换 text/color），带一次弹跳+音效。常用：rose→wilted_rose、seedling→tree、chain→bird、battery→battery_low、heart→broken_heart。
+
+## R37 意象·放手
+**适用**：放下/告别/释怀
+
+```json
+{
+  "title": "学会放手",
+  "set": "seaside",
+  "lines": ["有些人", "注定只能陪你[一段路]"],
+  "elements": [
+    {"type": "char", "who": "girl", "pos": "center-left", "expr": "smile", "pose": "wave"},
+    {"type": "icon", "name": "balloon", "size": 170, "x": 800, "y": 1000, "at": 0.2, "move": {"to": [880, 300], "at": "w:一段路", "dur": 1.4, "ease": "in", "scale": 0.6}}
+  ]
+}
+```
+> 💡 气球往上飘出画面 = 放手；同理 paper_plane 飞走 = 远去，rocket 冲上去 = 逆袭。
+
+## R38 意象·冰山
+**适用**：表面 vs 深层原因
+
+```json
+{
+  "title": "你看到的",
+  "title2": "只是[一角]",
+  "bg": "light-blue",
+  "lines": ["你看到的只是表面", "水下藏着的才是[原因]"],
+  "elements": [
+    {"type": "icon", "name": "iceberg", "size": 560, "x": 540, "y": 900, "at": 0.2},
+    {"type": "tag", "text": "发脾气", "color": "white", "x": 540, "y": 560, "at": "L1+0.3", "overlap": true},
+    {"type": "tag", "text": "怕被抛弃", "color": "red", "x": 540, "y": 1080, "at": "w:原因", "enter": "stamp", "overlap": true}
+  ]
+}
+```
+
+## R39 意象·被操控
+**适用**：控制/PUA/被拿捏
+
+```json
+{
+  "title": "被拿捏了",
+  "bg": "purple",
+  "lines": ["你以为是自己的选择", "其实一直被[操控]"],
+  "elements": [
+    {"type": "char", "who": "guy3", "expr": "neutral", "y": 1520, "acts": [{"at": "w:操控", "expr": "shock"}]},
+    {"type": "icon", "name": "puppet", "size": 240, "x": 540, "y": 540, "at": "w:操控", "enter": "drop", "loop": "swing"}
+  ]
+}
+```
+> 💡 比喻道具放在角色头顶（y≈560），角色往下挪（y:1460）留出空间。
+
+## R40 场景·选择
+**适用**：选择/纠结/岔路
+
+```json
+{
+  "title": "怎么选",
+  "set": "crossroads",
+  "lines": ["一边是安稳", "一边是[想要的生活]"],
+  "elements": [
+    {"type": "char", "who": "girl2", "pos": "center-left", "size": "M", "expr": "think", "pose": "chin", "acts": [{"at": "L2", "expr": "shock"}]},
+    {"type": "tag", "text": "安稳", "color": "yellow", "x": 820, "y": 640, "at": "L1+0.2"},
+    {"type": "tag", "text": "想要的生活", "color": "pink", "x": 800, "y": 780, "at": "w:想要的生活"}
+  ]
+}
+```
+
+## R41 意象·失衡
+**适用**：付出与回报不对等
+
+```json
+{
+  "title": "不对等",
+  "bg": "cream-yellow",
+  "lines": ["你给了全部", "他只给了[一点点]"],
+  "elements": [
+    {"type": "icon", "name": "seesaw", "size": 520, "x": 540, "y": 900, "at": 0.2, "move": {"by": [0, 0], "rot": -14, "at": "w:一点点", "dur": 0.5}},
+    {"type": "tag", "text": "你的付出", "color": "red", "x": 300, "y": 640, "at": "L1"},
+    {"type": "tag", "text": "他的回报", "color": "blue", "x": 780, "y": 640, "at": "w:一点点"}
+  ]
+}
+```
+> 💡 move 只写 rot（by:[0,0]）= 原地转动，用来表现"倾斜/失衡"。
+
+## R42 意象·成长
+**适用**：成长/改变/慢慢变好
+
+```json
+{
+  "title": "慢慢长大",
+  "set": "park",
+  "lines": ["别急", "你正在悄悄[长大]"],
+  "elements": [
+    {"type": "char", "who": "guy", "pos": "center-left", "expr": "smile", "acts": [{"at": "w:长大", "expr": "happy", "pose": "cheer"}]},
+    {"type": "icon", "name": "seedling", "size": 200, "x": 840, "y": 1150, "at": 0.3, "acts": [{"at": "w:长大", "name": "tree", "size": 300}]},
+    {"type": "particles", "kind": "sparkles", "count": 5, "x": 840, "y": 1000, "spread": 300, "at": "w:长大"}
+  ]
+}
+```

@@ -29,7 +29,8 @@
        "expr": "sad",
        "pose": "down"
       }
-     ]
+     ],
+     "pose": "phone"
     },
     {
      "type": "tag",
@@ -55,11 +56,11 @@
      "spread": 600,
      "at": "w:珍惜"
     }
-   ]
+   ],
+   "set": "bedroom_night"
   },
   {
    "title": "随叫随到",
-   "bg": "light-pink",
    "lines": [
     "明明你随叫随到",
     "却总被当成[备胎]"
@@ -96,7 +97,11 @@
      "rot": -12,
      "at": "w:备胎"
     }
-   ]
+   ],
+   "set": {
+    "name": "street",
+    "dim": 0.25
+   }
   },
   {
    "title": "不是你不好",
@@ -121,10 +126,28 @@
      ]
     },
     {
+     "type": "icon",
+     "name": "gift",
+     "size": 190,
+     "x": 470,
+     "y": 1060,
+     "at": 0.3,
+     "move": {
+      "at": "w:太容易",
+      "to": [
+       800,
+       850
+      ],
+      "arc": -140,
+      "rot": -10,
+      "dur": 0.6
+     }
+    },
+    {
      "type": "cross",
      "size": 200,
      "x": 790,
-     "y": 640,
+     "y": 620,
      "at": 0.4
     },
     {
@@ -132,7 +155,7 @@
      "text": "给得太容易",
      "color": "red",
      "x": 790,
-     "y": 1000,
+     "y": 1100,
      "at": "w:太容易",
      "enter": "stamp"
     }
@@ -140,7 +163,6 @@
   },
   {
    "title": "太容易得到",
-   "bg": "cream-yellow",
    "lines": [
     "人性就是这样",
     "太容易得到的东西",
@@ -172,14 +194,29 @@
      "at": "L2"
     },
     {
+     "type": "icon",
+     "name": "rose",
+     "size": 180,
+     "x": 800,
+     "y": 1030,
+     "at": "L2",
+     "acts": [
+      {
+       "at": "w:珍惜",
+       "name": "wilted_rose"
+      }
+     ]
+    },
+    {
      "type": "tag",
      "text": "随便拿",
      "color": "red",
      "x": 800,
-     "y": 1200,
+     "y": 1250,
      "at": "w:珍惜"
     }
-   ]
+   ],
+   "set": "date"
   },
   {
    "title": "理所当然",
@@ -230,7 +267,6 @@
   },
   {
    "title": "讨好的真相",
-   "bg": "dark",
    "lines": [
     "更扎心的是",
     "你不是真的善良",
@@ -264,7 +300,8 @@
      "at": "w:抛弃+0.2",
      "enter": "stamp"
     }
-   ]
+   ],
+   "set": "rain_window"
   },
   {
    "title": "讨好型人格",
@@ -301,12 +338,14 @@
      ]
     },
     {
-     "type": "char",
-     "who": "girl3",
-     "size": "S",
-     "x": 820,
-     "y": 1480,
-     "expr": "sweat"
+     "type": "icon",
+     "name": "puppet",
+     "size": 240,
+     "x": 800,
+     "y": 1180,
+     "at": "L2",
+     "label": "被牵着走",
+     "loop": "swing"
     },
     {
      "type": "bubble",
@@ -351,12 +390,19 @@
     },
     {
      "type": "icon",
-     "name": "broken_heart",
+     "name": "heart",
      "size": 240,
      "x": 820,
      "y": 780,
-     "at": "w:失去",
-     "label": "失去"
+     "at": "L2+0.3",
+     "label": "真心",
+     "acts": [
+      {
+       "at": "w:失去",
+       "name": "broken_heart",
+       "label": "失去"
+      }
+     ]
     },
     {
      "type": "char",
@@ -365,11 +411,11 @@
      "expr": "sad",
      "y": 1460
     }
-   ]
+   ],
+   "shake": "w:失去"
   },
   {
    "title": "学会拒绝",
-   "bg": "light-green",
    "lines": [
     "那怎么办？",
     "真正好的关系",
@@ -407,7 +453,8 @@
      "y": 1000,
      "at": "w:拒绝+0.3"
     }
-   ]
+   ],
+   "set": "park"
   },
   {
    "title": "记住这句话",
@@ -453,7 +500,6 @@
   },
   {
    "title": "先问问自己",
-   "bg": "pink sun",
    "lines": [
     "下次想说好的时候",
     "先问问[自己]愿不愿意"
@@ -488,7 +534,8 @@
      "at": "L2",
      "loop": "pulse"
     }
-   ]
+   ],
+   "set": "seaside"
   }
  ]
 }

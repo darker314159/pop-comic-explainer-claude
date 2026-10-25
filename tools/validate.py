@@ -46,6 +46,8 @@ def load_enums():
     E['charx'] = _keys_of_block(en, r'const CHAR_X = \{')
     E['charh'] = _keys_of_block(en, r'const CHAR_H = \{')
     E['enter'] = _keys_of_block(en, r'const ENTER_DUR = \{')
+    st = (ENG / 'sets.js').read_text(encoding='utf-8')
+    E['sets'] = _keys_of_block(st, r'const SETS = \{'); E['set_alias'] = _keys_of_block(st, r'const SET_ALIASES = \{')
     return E
 
 LOOPS = ['float', 'wiggle', 'pulse', 'shake', 'spin', 'bounce', 'swing', 'blink', 'heartbeat']
@@ -56,9 +58,9 @@ HAIRS = ['swept', 'curtain', 'spiky', 'slick', 'long', 'wavy', 'bob', 'pony']
 OUTFITS = ['blazer', 'hoodie', 'tee', 'suit', 'cami', 'blouse', 'knit']
 META_KEYS = {'series', 'voice', 'rate', 'pitch', 'tts', 'bgm', 'bgmGain', 'sfx', 'sfxGain', 'voiceGain', 'subMax', 'subY', 'header',
              'subtitles', 'watermark', 'gap', 'sceneTail', 'tail', 'speed', 'charSfx', 'title', 'note', 'fps', 'topic', 'ttsStyle', 'ttsModel', 'ttsWorkers', 'cover'}
-SCENE_KEYS = {'kind', 'num', 'label', 'color', 'chapter', 'title', 'title2', 'title_style', 'title_size', 'title2_size', 'title_y', 'title_at',
+SCENE_KEYS = {'set', 'kind', 'num', 'label', 'color', 'chapter', 'title', 'title2', 'title_style', 'title_size', 'title2_size', 'title_y', 'title_at',
               'bg', 'transition', 'lines', 'elements', 'punch', 'shake', 'flash', 'camera', 'dur', 'pad', 'note', 'id', 'tag'}
-COMMON = {'type', 'id', 'at', 'out', 'enter', 'exit', 'enterDur', 'loop', 'x', 'y', 'dx', 'dy', 'pos', 'of', 'rot', 'scale', 'z', 'sfx', 'sfxGain',
+COMMON = {'move', 'acts', 'type', 'id', 'at', 'out', 'enter', 'exit', 'enterDur', 'loop', 'x', 'y', 'dx', 'dy', 'pos', 'of', 'rot', 'scale', 'z', 'sfx', 'sfxGain',
           'anchor', 'stagger', 'note', 'overlap', 'opacity'}
 FIELDS = {
     'char': 'who expr pose look flip silhouette noBlink outfit style acts size hairColor outfitColor innerColor skin hair eyeColor lip glasses',
@@ -81,7 +83,8 @@ def plain(s): return re.sub(r'[\[\]]', '', str(s or ''))
 def spoken(s): return re.sub(r'[\s，。、！？!?,.；;：:“”"‘’\'（）()…—\-·~～\[\]]', '', str(s or ''))
 
 class Report:
-    def __init__(s): s.err, s.warn = [], []
+    def __init__(s): s.err, s.warn, s.hint = [], [], []
+    def H(s, where, msg): s.hint.append(f'💡 {where}: {msg}')
     def E(s, where, msg, fix=''): s.err.append(f'❌ {where}: {msg}' + (f'\n     → 修改建议: {fix}' if fix else ''))
     def W(s, where, msg, fix=''): s.warn.append(f'⚠️  {where}: {msg}' + (f'\n     → 建议: {fix}' if fix else ''))
 
@@ -120,6 +123,12 @@ def static_checks(story, E, R, timing=None):
         for k in sc:
             if k not in SCENE_KEYS: R.W(W, f'未知场景字段 "{k}"（会被忽略）', near(k, sorted(SCENE_KEYS)))
         part = sc.get('kind') == 'part'
+        if sc.get('set') is not None:
+            sv = sc['set']; sname = (sv.get('name') if isinstance(sv, dict) else str(sv).split()[0]) if sv else ''
+            if sname not in E['sets'] + E['set_alias']: R.E(W, f'set = "{sname}" 不存在', near(sname, E['sets']))
+            if isinstance(sv, dict):
+                for k in sv:
+                    if k not in ('name', 'flip', 'dim'): R.W(W, f'set 的字段 "{k}" 无效', 'name / flip / dim')
         if sc.get('kind') not in (None, 'part'): R.E(W, f'kind 只能是 "part" 或不写，现在是 "{sc.get("kind")}"')
         if part:
             parts += 1
@@ -194,6 +203,32 @@ def static_checks(story, E, R, timing=None):
                         R.E(WE, f'{k} = "{e[k]}" 但旁白里找不到「{word}」', '关键词必须原样出现在本场景的 lines 里')
                 m = re.match(r'^L(\d+)', str(e.get(k, '')))
                 if m and int(m.group(1)) > len(lines): R.E(WE, f'{k} = "{e[k]}" 但本场景只有 {len(lines)} 句旁白')
+            def chk_at(v, label):
+                if isinstance(v, (int, float)): return
+                if not AT_RE.match(str(v).strip()): R.E(WE, f'{label} = "{v}" 格式不对', '数字秒数 / "L2" / "L2e" / "L2+0.3" / "w:关键词" / "end-0.5"'); return
+                if str(v).startswith('w') and ':' in str(v):
+                    word = re.sub(r'[+-]\d*\.?\d+$', '', str(v).split(':', 1)[1])
+                    if not any(word in plain(L if isinstance(L, str) else L.get('text', '')) for L in lines): R.E(WE, f'{label} = "{v}" 但旁白里找不到「{word}」', '关键词必须原样出现在本场景的 lines 里')
+                mm = re.match(r'^L(\d+)', str(v))
+                if mm and int(mm.group(1)) > len(lines): R.E(WE, f'{label} = "{v}" 但本场景只有 {len(lines)} 句旁白')
+            for mv in ([e['move']] if isinstance(e.get('move'), dict) else e.get('move') or []):
+                if not isinstance(mv, dict): R.E(WE, 'move 必须是对象或对象数组 {"to":[x,y],"at":"w:词","dur":0.7}'); continue
+                for k in mv:
+                    if k not in ('to', 'by', 'at', 'dur', 'arc', 'rot', 'scale', 'ease', 'sfx'): R.W(WE, f'move 字段 "{k}" 无效', 'to / by / at / dur / arc / rot / scale / ease / sfx')
+                if 'to' not in mv and 'by' not in mv: R.E(WE, 'move 需要 "to":[x,y]（或槽位名）或 "by":[dx,dy]')
+                if isinstance(mv.get('to'), list) and (len(mv['to']) != 2 or not all(isinstance(v, (int, float)) for v in mv['to'])): R.E(WE, 'move.to 要写成 [x, y]')
+                if isinstance(mv.get('to'), str) and mv['to'] not in E['slots'] + E['charx']: R.E(WE, f'move.to = "{mv["to"]}" 不存在', near(mv['to'], E['slots'] + E['charx']))
+                if isinstance(mv.get('to'), list) and len(mv['to']) == 2 and not (-400 <= mv['to'][0] <= 1480 and -400 <= mv['to'][1] <= 2300): R.W(WE, f'move.to {mv["to"]} 离画面很远（想飞出画面可以，确认是故意的）')
+                if 'at' in mv: chk_at(mv['at'], 'move.at')
+                if mv.get('ease') and mv['ease'] not in ('inOut', 'in', 'out', 'linear'): R.E(WE, f'move.ease "{mv["ease"]}" 不存在', 'inOut / in / out / linear')
+            if ty != 'char' and e.get('acts') is not None:
+                if not isinstance(e['acts'], list): R.E(WE, 'acts 必须是数组 [{"at":"w:词","name":"wilted_rose"}]')
+                else:
+                    if ty in ('card', 'chat', 'polaroids', 'particles', 'arrow', 'versus', 'avatars', 'progress', 'meter', 'counter', 'emph', 'spotlight'): R.W(WE, f'{ty} 不支持 acts 变化（会被重绘打断动画）', '只给 icon / tag / stamp / text / bubble / burst / pricetag / number / image / avatar / onoma / shape 用')
+                    for a in e['acts']:
+                        if not isinstance(a, dict) or 'at' not in a: R.E(WE, 'acts 里每一项都要有 at'); continue
+                        chk_at(a['at'], 'acts.at')
+                        if ty == 'icon' and a.get('name') and a['name'] not in E['icon']: R.E(WE, f'acts.name = "{a["name"]}" 不存在', near(a['name'], E['icon']))
             def chk_enum(field, opts, required=False):
                 v = e.get(field)
                 if v is None:
@@ -277,6 +312,34 @@ def static_checks(story, E, R, timing=None):
     enum_hits = [t for t in enum_lines if enum_re.match(t)]
     if len(enum_hits) >= 3 or parts >= 3:
         R.W('全片', f'检测到"第一、第二、第三"式的列点结构（{len(enum_hits)} 句，PART 卡 {parts} 张）', '本风格不要求按 1、2、3 列点。除非原稿本身就是清单，否则改成自然推进：钩子 → 冲突/原因 → 案例 → 爆点 → 回应开头的结尾；PART 卡只在长视频里偶尔用')
+    # ---- richness: scenes should be visualised from the copy (sets / props / motion), not just a character + stickers
+    try:
+        sys.path.insert(0, str(Path(__file__).resolve().parent)); import imagery
+    except Exception: imagery = None
+    PROPS = ('icon', 'image', 'chat', 'card', 'polaroids', 'versus', 'meter', 'progress', 'pricetag', 'burst', 'number', 'avatars', 'counter')
+    real = [(i, sc) for i, sc in enumerate(scenes) if isinstance(sc, dict) and sc.get('kind') != 'part']
+    def rich(sc):
+        els = [e for e in sc.get('elements', []) or [] if isinstance(e, dict)]
+        return dict(set=bool(sc.get('set')), prop=any(e.get('type') in PROPS for e in els), motion=any(e.get('move') or (e.get('type') != 'char' and e.get('acts')) for e in els))
+    plain_run = 0; hints = 0
+    for i, sc in real:
+        rr = rich(sc)
+        plain_run = 0 if (rr['set'] or rr['prop']) else plain_run + 1
+        if plain_run == 3: R.W(f'场景{i - 1}~{i + 1}', '连续 3 个场景都只有角色+贴纸，画面单调', '按旁白把画面"翻译"出来：地点 → set 场景插画；物品/比喻 → icon 道具（可 move 移动、acts 变形）。参考 references/visualization.md')
+        if imagery and hints < 10:
+            sg = imagery.suggest(sc)
+            els = [e for e in sc.get('elements', []) or [] if isinstance(e, dict)]
+            have = {e.get('name') for e in els if e.get('type') == 'icon'} | {a.get('name') for e in els for a in (e.get('acts') or []) if isinstance(a, dict)} | {e.get('type') for e in els}
+            if sg['set'] and not sc.get('set') and not rr['prop']:
+                R.H(f'场景{i + 1}', f'旁白提到「{sg["set_kw"]}」→ 可以加场景插画 "set": "{sg["set"]}"'); hints += 1
+            for icon, kw, ent in sg['props'][:1]:
+                if not (set(ent.get('icons', [])) & have) and not (ent.get('comp') and ent['comp'] in have):
+                    R.H(f'场景{i + 1}', f'旁白提到「{kw}」→ 画面里还没有：{{"type":"icon","name":"{icon}","at":"w:{kw}"}}' + (f'（{ent["tip"]}）' if ent.get('tip') else '')); hints += 1
+    if len(real) >= 6:
+        n_set = sum(1 for _, sc in real if sc.get('set')); n_prop = sum(1 for _, sc in real if rich(sc)['prop']); n_mot = sum(1 for _, sc in real if rich(sc)['motion'])
+        if n_set == 0: R.W('全片', '没有用任何场景插画（set），画面会显得单调', '给有地点/情境的场景加 "set"（office / bedroom_night / date / city_night / rain_window / crossroads …，共 16 个，见 references/img/sets.jpg），建议 ≥ 1/3 的场景')
+        if n_prop < len(real) * 0.4: R.W('全片', f'只有 {n_prop}/{len(real)} 个场景有道具/图形主视觉', '把旁白里的物品和比喻画出来（icon 110 个，见 references/img/icons.jpg；词典：python3 tools/visualize.py story.json）')
+        if n_mot == 0: R.W('全片', '道具都是静止出现的，没有"演"出来', '至少 2~3 个场景用 move（礼物递过去 / 气球飘走 / 箭头飞入）或 acts（玫瑰枯萎 / 幼苗长成树 / 锁链变小鸟）')
     # unfinished placeholders left by script2story.py
     blob = json.dumps(scenes, ensure_ascii=False)
     if re.search(r'待填|TODO|【.*?】', blob): R.E('全片', '分镜里还有占位符（待填 / TODO / 【…】）', '把所有占位符替换成真实内容（标题、元素）再渲染')
@@ -315,7 +378,7 @@ async def layout_checks(story, timing, R, describe=False):
                 def allowed(b):
                     if b['idx'] < 0 or b['idx'] >= len(els): return False
                     e_ = els[b['idx']]
-                    return bool(e_.get('overlap') or (e_.get('type') == 'burst' and not e_.get('text')) or (isinstance(e_.get('z'), (int, float)) and e_['z'] < 0))
+                    return bool(e_.get('overlap') or e_.get('move') or (e_.get('type') == 'burst' and not e_.get('text')) or (isinstance(e_.get('z'), (int, float)) and e_['z'] < 0))
                 for b in boxes:
                     if b['type'] in ('subtitle', 'char'): continue
                     key = ('oob', b['idx'])
@@ -367,6 +430,7 @@ def main():
         except ImportError: R.W('浏览器', '没装 playwright，跳过排版检查（pip install playwright）')
     for m in R.err: print(m)
     for m in R.warn: print(m)
+    if R.hint: print('\n画面建议（不影响通过，按需采纳）：'); [print(m) for m in R.hint]
     tinfo = f'，总时长 {total:.1f}s' + ('' if timing else '（估算，未配音）') if total else ''
     if total and total < 30: print(f'⚠️  全片 {total:.0f}s 偏短（建议 45~150s）')
     if total and total > 180: print(f'⚠️  全片 {total:.0f}s 偏长（建议 ≤ 150s）')

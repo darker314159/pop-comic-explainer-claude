@@ -215,7 +215,7 @@
   },
   {
    "title": "一句话破防",
-   "bg": "cream-blue",
+   "set": "cafe",
    "lines": [
     "他随口一句",
     "[你变了]",
@@ -255,8 +255,9 @@
      "type": "onoma",
      "text": "BOOM!",
      "color": "red",
-     "x": 800,
-     "y": 560,
+     "x": 540,
+     "y": 1180,
+     "size": 100,
      "at": "L3",
      "enter": "slam"
     }
@@ -1337,6 +1338,423 @@
     }
    ],
    "note": "R32 图片素材"
+  },
+  {
+   "title": "凌晨两点",
+   "set": "bedroom_night",
+   "lines": [
+    "凌晨两点",
+    "你又在等他的[消息]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl3",
+     "pose": "phone",
+     "expr": "tired",
+     "pos": "center-left",
+     "acts": [
+      {
+       "at": "w:消息",
+       "expr": "sad"
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "name": "phone",
+     "size": 190,
+     "x": 830,
+     "y": 760,
+     "at": "L1+0.3",
+     "loop": "wiggle"
+    },
+    {
+     "type": "particles",
+     "kind": "zzz",
+     "count": 3,
+     "x": 820,
+     "y": 600,
+     "spread": 200,
+     "at": 0.4
+    }
+   ],
+   "note": "R33 场景·深夜手机"
+  },
+  {
+   "title": "又要加班",
+   "set": "office",
+   "lines": [
+    "老板一句话",
+    "你的周末就[没了]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "boss",
+     "pos": "left",
+     "size": "M",
+     "expr": "smug",
+     "pose": "point",
+     "id": "b"
+    },
+    {
+     "type": "char",
+     "who": "guy",
+     "pos": "right",
+     "size": "M",
+     "expr": "neutral",
+     "id": "g",
+     "acts": [
+      {
+       "at": "w:没了",
+       "expr": "cry"
+      }
+     ]
+    },
+    {
+     "type": "bubble",
+     "text": "今晚加个班",
+     "of": "b",
+     "pos": "head-top",
+     "at": 0.4,
+     "tail": "bottom"
+    },
+    {
+     "type": "icon",
+     "name": "calendar",
+     "size": 150,
+     "x": 820,
+     "y": 560,
+     "at": "w:没了",
+     "enter": "stamp"
+    }
+   ],
+   "note": "R34 场景·职场"
+  },
+  {
+   "title": "你的付出",
+   "set": "date",
+   "lines": [
+    "你送出的[礼物]",
+    "他看都没看一眼"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy2",
+     "pos": "right",
+     "size": "M",
+     "expr": "bored",
+     "acts": [
+      {
+       "at": "L2",
+       "look": 1
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "name": "gift",
+     "size": 180,
+     "x": 160,
+     "y": 1000,
+     "at": 0.15,
+     "move": {
+      "to": [
+       600,
+       900
+      ],
+      "at": "w:礼物",
+      "dur": 0.6,
+      "arc": 140
+     }
+    },
+    {
+     "type": "tag",
+     "text": "已读不回",
+     "color": "grey",
+     "x": 300,
+     "y": 640,
+     "at": "L2+0.2"
+    }
+   ],
+   "note": "R35 道具·递送"
+  },
+  {
+   "title": "慢慢枯萎",
+   "set": "rain_window",
+   "lines": [
+    "再热烈的感情",
+    "也会慢慢[枯萎]"
+   ],
+   "elements": [
+    {
+     "type": "icon",
+     "name": "rose",
+     "size": 360,
+     "x": 540,
+     "y": 860,
+     "at": 0.2,
+     "acts": [
+      {
+       "at": "w:枯萎",
+       "name": "wilted_rose"
+      }
+     ]
+    },
+    {
+     "type": "particles",
+     "kind": "broken",
+     "count": 4,
+     "x": 540,
+     "y": 900,
+     "spread": 500,
+     "at": "w:枯萎"
+    }
+   ],
+   "note": "R36 道具·变形"
+  },
+  {
+   "title": "学会放手",
+   "set": "seaside",
+   "lines": [
+    "有些人",
+    "注定只能陪你[一段路]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl",
+     "pos": "center-left",
+     "expr": "smile",
+     "pose": "wave"
+    },
+    {
+     "type": "icon",
+     "name": "balloon",
+     "size": 170,
+     "x": 800,
+     "y": 1000,
+     "at": 0.2,
+     "move": {
+      "to": [
+       880,
+       300
+      ],
+      "at": "w:一段路",
+      "dur": 1.4,
+      "ease": "in",
+      "scale": 0.6
+     }
+    }
+   ],
+   "note": "R37 意象·放手"
+  },
+  {
+   "title": "你看到的",
+   "title2": "只是[一角]",
+   "bg": "light-blue",
+   "lines": [
+    "你看到的只是表面",
+    "水下藏着的才是[原因]"
+   ],
+   "elements": [
+    {
+     "type": "icon",
+     "name": "iceberg",
+     "size": 560,
+     "x": 540,
+     "y": 900,
+     "at": 0.2
+    },
+    {
+     "type": "tag",
+     "text": "发脾气",
+     "color": "white",
+     "x": 540,
+     "y": 560,
+     "at": "L1+0.3",
+     "overlap": true
+    },
+    {
+     "type": "tag",
+     "text": "怕被抛弃",
+     "color": "red",
+     "x": 540,
+     "y": 1080,
+     "at": "w:原因",
+     "enter": "stamp",
+     "overlap": true
+    }
+   ],
+   "note": "R38 意象·冰山"
+  },
+  {
+   "title": "被拿捏了",
+   "bg": "purple",
+   "lines": [
+    "你以为是自己的选择",
+    "其实一直被[操控]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy3",
+     "expr": "neutral",
+     "y": 1520,
+     "acts": [
+      {
+       "at": "w:操控",
+       "expr": "shock"
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "name": "puppet",
+     "size": 240,
+     "x": 540,
+     "y": 540,
+     "at": "w:操控",
+     "enter": "drop",
+     "loop": "swing"
+    }
+   ],
+   "note": "R39 意象·被操控"
+  },
+  {
+   "title": "怎么选",
+   "set": "crossroads",
+   "lines": [
+    "一边是安稳",
+    "一边是[想要的生活]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "girl2",
+     "pos": "center-left",
+     "size": "M",
+     "expr": "think",
+     "pose": "chin",
+     "acts": [
+      {
+       "at": "L2",
+       "expr": "shock"
+      }
+     ]
+    },
+    {
+     "type": "tag",
+     "text": "安稳",
+     "color": "yellow",
+     "x": 820,
+     "y": 640,
+     "at": "L1+0.2"
+    },
+    {
+     "type": "tag",
+     "text": "想要的生活",
+     "color": "pink",
+     "x": 800,
+     "y": 780,
+     "at": "w:想要的生活"
+    }
+   ],
+   "note": "R40 场景·选择"
+  },
+  {
+   "title": "不对等",
+   "bg": "cream-yellow",
+   "lines": [
+    "你给了全部",
+    "他只给了[一点点]"
+   ],
+   "elements": [
+    {
+     "type": "icon",
+     "name": "seesaw",
+     "size": 520,
+     "x": 540,
+     "y": 900,
+     "at": 0.2,
+     "move": {
+      "by": [
+       0,
+       0
+      ],
+      "rot": -14,
+      "at": "w:一点点",
+      "dur": 0.5
+     }
+    },
+    {
+     "type": "tag",
+     "text": "你的付出",
+     "color": "red",
+     "x": 300,
+     "y": 640,
+     "at": "L1"
+    },
+    {
+     "type": "tag",
+     "text": "他的回报",
+     "color": "blue",
+     "x": 780,
+     "y": 640,
+     "at": "w:一点点"
+    }
+   ],
+   "note": "R41 意象·失衡"
+  },
+  {
+   "title": "慢慢长大",
+   "set": "park",
+   "lines": [
+    "别急",
+    "你正在悄悄[长大]"
+   ],
+   "elements": [
+    {
+     "type": "char",
+     "who": "guy",
+     "pos": "center-left",
+     "expr": "smile",
+     "acts": [
+      {
+       "at": "w:长大",
+       "expr": "happy",
+       "pose": "cheer"
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "name": "seedling",
+     "size": 200,
+     "x": 840,
+     "y": 1150,
+     "at": 0.3,
+     "acts": [
+      {
+       "at": "w:长大",
+       "name": "tree",
+       "size": 300
+      }
+     ]
+    },
+    {
+     "type": "particles",
+     "kind": "sparkles",
+     "count": 5,
+     "x": 840,
+     "y": 1000,
+     "spread": 300,
+     "at": "w:长大"
+    }
+   ],
+   "note": "R42 意象·成长"
   }
  ]
 }

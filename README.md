@@ -2,6 +2,8 @@
 
 把一段口播文案 → 1080×1920 竖屏波普漫画风讲解视频（角色、动效、字幕、配音、音效、BGM 全自动）。
 模型只需要写一个 `story.json` 分镜文件，引擎负责画面。
+- **按文案可视化**：16 张场景插画（卧室/深夜/办公室/约会/雨夜/地铁/海边/岔路口…）+ 111 个意象道具（礼物、玫瑰→枯萎、冰山、提线木偶、跷跷板、气球…）+ `move`/`acts` 动作，`tools/visualize.py` 自动给出每个场景的画面建议。
+- **自动在线部署**：渲染完自动上传，输出可直接下载的链接（默认 litterbox 72 小时直链，失败自动切换 uguu / gofile；配置 `catbox_userhash` 可永久保存）。
 
 ## 安装
 ```bash
@@ -39,18 +41,37 @@ mkdir -p projects/my_video && vim projects/my_video/script.md   # 标题：/封�
 python3 tools/script2story.py projects/my_video/script.md      # → story.json 骨架（再填标题和画面）
 # 或者：cp -r examples/pleaser projects/my_video               # 拿示例改
 python3 tools/make.py projects/my_video/story.json --check   # 校验 + 配音 + 预览图
-python3 tools/make.py projects/my_video/story.json           # 渲染 → projects/my_video/build/video.mp4
+python3 tools/visualize.py projects/my_video/story.json      # 每个场景的 场景插画/道具/动作 建议（--apply 自动补）
+python3 tools/make.py projects/my_video/story.json           # 渲染 → build/video.mp4，并自动上传给出 🔗 下载链接
+python3 tools/publish.py projects/my_video/build/video.mp4   # 单独上传（--host litterbox|uguu|gofile|catbox）
 ```
 
 ## 目录
 - `SKILL.md` 主说明（流程 / 硬性规则 / 速查）
-- `references/` 文案写作、32 个场景模板、组件字段、角色、风格规范、质检清单、参考图
-- `engine/` 渲染引擎（HTML/SVG 角色 + 动画），`fonts/` 开源字体（OFL），`sfx/` `bgm/` 自制无版权音效与音乐
-- `tools/` make（一键）、validate（校验 + 文字版画面描述）、tts（小米 MiMo / edge-tts 配音 + 字级时间轴）、setup_mimo（配置小米 Key）、script2story（文案 → 分镜骨架）、preview（预览图）、render（多进程渲染 + 混音）、gallery（重新生成参考图）
+- `references/` 文案写作、42 个场景模板、文案可视化翻译法、组件字段、角色、风格规范、质检清单、参考图
+- `engine/` 渲染引擎（HTML/SVG 角色 + 场景插画 + 道具 + 动画），`fonts/` 开源字体（OFL），`sfx/` `bgm/` 自制无版权音效与音乐
+- `tools/` make（一键）、validate（校验 + 文字版画面描述）、tts（小米 MiMo / edge-tts 配音 + 字级时间轴）、setup_mimo（配置小米 Key）、script2story（文案 → 分镜骨架）、preview（预览图）、render（多进程渲染 + 混音）、visualize / imagery（文案 → 场景插画/意象道具建议）、publish（在线部署并给出下载链接）、gallery（重新生成参考图）
 - `copywriting/water-koubo/` 第三方文案二创 Skill（CC BY-NC 4.0）
 - `examples/` 完整示例（含成片）
 
 字体：站酷庆科黄油体、站酷快乐体、得意黑、思源黑体、Archivo Black、Bangers，均为 SIL OFL 开源字体，可商用。
+
+## ⚠️ 隐私提示：成片默认会被上传到公共托管
+
+`tools/make.py` 渲染完成后，**第 6 步会自动调用 `tools/publish.py`，把成片上传到公共文件托管**
+（catbox / litterbox / uguu / gofile），返回一个**任何人都能下载的链接**。
+
+- 不想要公开链接，务必加 `--no-publish`：
+
+  ```bash
+  python3 tools/make.py projects/my_video/story.json --no-publish
+  ```
+
+- 也可以改 `config.json` 的 `publish_hosts` 为空数组，或直接删掉 `tools/publish.py`。
+- 上传记录写在成片同目录的 `publish.json`（含 URL / 托管 / 有效期）。
+- 各托管保存期：`catbox` 永久（需 `catbox_userhash`）、`litterbox` 最长 72 小时、`uguu` 约 3 小时、`gofile` 长期但为下载页。
+
+> **涉及商业内容、未发布素材、客户隐私时，请一律用 `--no-publish`。**
 
 ## 从本仓库安装
 

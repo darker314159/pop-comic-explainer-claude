@@ -21,6 +21,8 @@
 | `sfx` | 出场音效名或 `false` 关闭 | `"ding"` `false` |
 | `id` / `of` | 给角色起名 / 指定贴在哪个角色头旁 | `"id":"a"` / `"of":"a"` |
 | `overlap` | `true` = 故意叠放，校验器不报重叠 | |
+| `move` | 出现后**移动**到别处（递送/扔掉/飞走/掉落）：`{to:[x,y]|"位置名"|"角色id", by:[dx,dy], at, dur(.7), arc, rot, scale, ease, sfx}`；数组 = 连续动作 | `{"at":"L2","to":[880,1200],"arc":-160,"rot":200}` |
+| `acts` | 非角色元素也能切换：`[{at, name?, text?, color?, size?…}]`，到点后重新绘制并弹一下（玫瑰→枯萎、标签改字） | `[{"at":"w:枯萎","name":"wilted_rose"}]` |
 
 **pos 位置网格（中心点坐标）**
 ```
@@ -32,6 +34,8 @@ bottom-left(250,1250) bottom(540,1250) bottom-right(830,1250)
 head-left / head-right / head-top：跟随角色头部（多角色时加 "of"）
 ```
 不写 `pos` 和 `x/y` 的贴纸类元素（tag/counter/bubble/onoma/icon/stamp…）会 **自动找空位**，避开标题和角色的脸。
+
+**场景插画 `set`（写在场景上，不是元素）**：`"set":"office"` 或 `{"name":"office","flip":true,"dim":0.3}`，16 张：`bedroom bedroom_night office cafe date street city_night park classroom living_room rain_window party subway stage seaside crossroads`。用法见 `visualization.md`。
 
 **音效名**：`pop pop2 pops boing boom buzz click count ding hit msg rise sparkle stamp swing swish tada type whoosh wrong`（每种元素有默认音效，一般不用写）
 
@@ -109,13 +113,15 @@ head-left / head-right / head-top：跟随角色头部（多角色时加 "of"）
 ```
 英文大写 + 感叹号：`POW! BOOM! WOW! OOPS! BOING! FREE! BUT! BEEP! OMG! ZZZ… CHILL~ YES! NO!`
 
-## icon — 手绘图标（70 个，见 img/icons.jpg）
+## icon — 手绘图标（111 个，见 img/icons.jpg）
 ```json
 {"type":"icon","name":"cage","size":480,"x":540,"y":880,"label":"安全感？","enter":"drop"}
 ```
 `name` 必填；`size`(220) `color`(主色，覆盖默认) `color2` `label`(下方白色小标签) `labelColor`
-图标名：`heart broken_heart star lightning question exclaim magnifier phone chat lock key gift money coin crown trophy fire bomb balance clock gauge cage bird check cross arrow_up arrow_down thumbs_up eye brain battery battery_low target shield mask rose envelope candle camera mirror tag dice gamepad ring sparkle zzz sweat music idea warning ban chart_up chart_down wine bed door footprints`
-别名：`love→heart bulb→idea search→magnifier msg→chat ok→check no→cross up→arrow_up down→arrow_down`
+图标名：`heart broken_heart star lightning question exclaim magnifier phone chat lock key gift money coin crown trophy fire bomb balance clock gauge cage bird check cross arrow_up arrow_down thumbs_up eye brain battery battery_low target shield mask rose envelope candle camera mirror tag dice gamepad ring sparkle zzz sweat music idea warning ban chart_up chart_down wine bed door footprints umbrella ladder chain puppet iceberg hourglass seesaw balloon rocket rope bridge maze thermometer wallet coffee cake ice_cube bandage pill seedling tree sun moon cloud_rain house car plane suitcase calendar book microphone megaphone puzzle magnet hook anchor flag mountain wilted_rose scissors paper_plane trash brick_wall compass lighthouse snowflake glass_half shopping_bag signpost handcuffs tv sofa briefcase crack`
+别名：`love→heart clock_sand→hourglass time→hourglass ice→ice_cube cold→snowflake bait→hook wall→brick_wall home→house plant→seedling grow→seedling bag→shopping_bag luggage→suitcase cup→coffee mic→microphone road_sign→signpost withered_rose→wilted_rose idea_bulb→idea bulb→idea q→question ok→check no→cross x→cross search→magnifier talk→chat msg→chat price→tag game→gamepad up→arrow_up down→arrow_down`
+
+意象道具查询：`python3 tools/imagery.py 冷暴力 放手`；比喻→图标对照见 `visualization.md`。
 
 ## text — 自由文字
 ```json

@@ -179,9 +179,15 @@ function buildDOM(meta) {
   FLASH = div('layer', ROOT); FLASH.style.background = '#fff'; FLASH.style.opacity = 0;
 }
 function div(cls, parent) { const d = document.createElement('div'); if (cls) d.className = cls; parent.appendChild(d); return d; }
-function bgHTML(bg) {
+function bgHTML(bg, set) {
   const parts = String(bg || 'cream').split(/\s+/); const b = BG[parts[0]] || { c: col(parts[0], '#f4ecdf'), dot: 'transparent' };
   let h = `<div class="bg" style="background:${b.c}">`;
+  if (set && G.SETS && SETS.resolve(set.name)) {   // illustrated environment replaces the flat background
+    const dark = SETS.isDark(set.name);
+    h += SETS.svg(set.name, set) + `<div class="haze" style="background:linear-gradient(180deg,${dark ? 'rgba(14,14,28,.62)' : 'rgba(255,250,240,.78)'} 0%,${dark ? 'rgba(14,14,28,.35)' : 'rgba(255,250,240,.45)'} 30%,transparent 42%)"></div>`;
+    if (parts.includes('rays')) h += `<div class="rays" style="--rayc:rgba(255,255,255,.18)"></div>`;
+    return h + `<div class="paper"></div></div>`;
+  }
   if (parts.includes('sun')) h += `<div class="sun" style="--sun1:${b.c};--sun2:${b.dot}"></div>`;
   if (parts.includes('rays') || (b.ray && !parts.includes('flat') && !parts.includes('sun'))) h += `<div class="rays" style="--rayc:${b.ray || 'rgba(0,0,0,.06)'}"></div>`;
   if (b.grid || parts.includes('grid')) h += `<div class="grid"></div>`;
@@ -194,8 +200,11 @@ function prepScene(sc) {
   const spec = sc.spec; const meta = POP.story.meta || {};
   sc.node = div('layer', SCN_LAYER); sc.node.style.display = 'none';
   let bg = spec.bg; if (spec.kind === 'part' && !bg) { const ch = POP.chapters.find(c => c.id === (spec.num || sc.chapter)); bg = (spec.color || (ch && ch.color) || 'yellow') + ' rays'; }
-  sc.node.innerHTML = bgHTML(bg || 'cream');
-  sc.bgDark = /^(dark|navy)/.test(bg || '');
+  const setSpec = spec.set ? (typeof spec.set === 'string' ? { name: spec.set, flip: /\bflip\b/.test(spec.set) } : spec.set) : null;
+  if (setSpec && !(G.SETS && SETS.resolve(setSpec.name))) POP.warnings.push(`scene ${sc.i + 1}: unknown set "${setSpec.name}"`);
+  sc.node.innerHTML = bgHTML(bg || 'cream', setSpec);
+  sc.hasSet = !!(setSpec && G.SETS && SETS.resolve(setSpec.name));
+  sc.bgDark = sc.hasSet ? SETS.isDark(setSpec.name) : /^(dark|navy)/.test(bg || '');
   sc.els = [];
   let elems = (spec.elements || []).slice();
   sc.partN = 0; if (spec.kind === 'part') { const pe = partElements(spec, sc); sc.partN = pe.length; elems = pe.concat(elems); }
@@ -240,6 +249,30 @@ function prepScene(sc) {
     el.rot = e.rot ?? (comp.rot ? ((hashStr(e.text || k) % 9) - 4) : 0);
     el.scale = e.scale ?? 1;
     el.anchor = e.anchor || comp.anchor || 'center';
+    // motion: "move": {to:[x,y] | "slot", by:[dx,dy], at, dur, arc, rot, scale, ease}  (or an array of moves, chained)
+    el.moves = []; let fx0 = x, fy0 = y;
+    for (const m of [].concat(e.move || [])) {
+      if (!m) continue;
+      let tx = fx0, ty = fy0;
+      if (Array.isArray(m.to)) [tx, ty] = m.to; else if (typeof m.to === 'string' && SLOTS[m.to]) [tx, ty] = SLOTS[m.to];
+      else if (typeof m.to === 'string' && CHAR_X[m.to] !== undefined) tx = CHAR_X[m.to];
+      if (Array.isArray(m.by)) { tx = fx0 + m.by[0]; ty = fy0 + m.by[1]; }
+      const mv = { t0: resolveAt(m.at, sc, el.tIn + .4), dur: m.dur ?? .7, fx: fx0, fy: fy0, tx, ty, arc: m.arc || 0, rot: m.rot || 0, scale: m.scale ?? 1, ease: m.ease || 'inOut' };
+      if (mv.t0 > sc.dur - .2) POP.warnings.push(`scene ${sc.i + 1}: element #${k + 1} move at=${m.at} -> ${mv.t0.toFixed(2)}s exceeds scene length ${sc.dur.toFixed(2)}s`);
+      el.moves.push(mv); fx0 = tx; fy0 = ty;
+      if (m.sfx !== false) POP.cues.push({ t: sc.start + mv.t0, sfx: m.sfx || 'swish', gain: .6 });
+    }
+    el.endX = fx0; el.endY = fy0;
+    // state changes for props: "acts": [{at, name|text|color|...}] -> re-render (icon rose -> wilted_rose, tag text change …)
+    el.states = null;
+    if (e.type !== 'char' && Array.isArray(e.acts) && e.acts.length) {
+      let cur = Object.assign({}, e); el.states = [{ t: -1, spec: cur }];
+      e.acts.map(a => Object.assign({}, a, { _t: resolveAt(a.at, sc) })).sort((a, b) => a._t - b._t).forEach(a => {
+        const { at, _t, sfx: asfx, ...rest } = a; cur = Object.assign({}, cur, rest); el.states.push({ t: _t, spec: cur });
+        if (_t > sc.dur - .2) POP.warnings.push(`scene ${sc.i + 1}: element #${k + 1} act at=${at} -> ${_t.toFixed(2)}s exceeds scene length ${sc.dur.toFixed(2)}s`);
+        POP.cues.push({ t: sc.start + _t, sfx: asfx || 'pop2', gain: .7 });
+      });
+    }
     // items with own times (card/chat)
     if (Array.isArray(e.items)) e._itemT = e.items.map(it => (it && typeof it === 'object' && it.at !== undefined) ? resolveAt(it.at, sc) - el.tIn : null);
     const node = document.createElement('div'); node.className = 'el';
@@ -339,11 +372,24 @@ function drawEl(el, lt) {
   let fx = ed > 0 ? enterFx(el.enter, a / ed) : {};
   if (lt > el.tOut) { const q = clamp01((lt - el.tOut) / .25); fx = el.exit === 'fade' ? { o: 1 - q } : el.exit === 'slide-left' ? { x: -700 * easeInCubic(q) } : el.exit === 'slide-right' ? { x: 700 * easeInCubic(q) } : el.exit === 'drop' ? { y: 900 * easeInCubic(q) } : { s: 1 - easeInCubic(q), o: 1 - q }; }
   const lp = el.spec.loop ? loopFx(el.spec.loop, a, el.idx) : {};
+  let swapS = 1;
+  if (el.states) {
+    let si = 0; for (let k = 1; k < el.states.length; k++) if (lt >= el.states[k].t) si = k;
+    if (el.curState !== si) { el.curState = si; el.inner.innerHTML = el.comp.html(el.states[si].spec, el.sc); el.subs = el.aps = null; }
+    const q = lt - el.states[si].t; if (si > 0 && q < .32) swapS = 1 + .28 * Math.sin(q / .32 * Math.PI);
+  }
   const cf = el.comp.frame ? (el.comp.frame(el, a) || {}) : {};
-  const x = el.x + (fx.x || 0) + (lp.x || 0) + (cf.dx || 0), y = el.y + (fx.y || 0) + (lp.y || 0) + (cf.dy || 0);
-  const s = el.scale * (fx.s ?? 1) * (lp.s ?? 1) * (cf.s ?? 1);
+  let bx = el.x, by = el.y, mr = 0, ms = 1;
+  for (const m of el.moves || []) {
+    if (lt <= m.t0) break;
+    const q = clamp01((lt - m.t0) / Math.max(.01, m.dur));
+    const p = m.ease === 'linear' ? q : m.ease === 'out' ? 1 - Math.pow(1 - q, 3) : m.ease === 'in' ? q * q * q : (q < .5 ? 4 * q * q * q : 1 - Math.pow(-2 * q + 2, 3) / 2);
+    bx = m.fx + (m.tx - m.fx) * p; by = m.fy + (m.ty - m.fy) * p - m.arc * Math.sin(Math.PI * p); mr += m.rot * p; ms *= 1 + (m.scale - 1) * p;
+  }
+  const x = bx + (fx.x || 0) + (lp.x || 0) + (cf.dx || 0), y = by + (fx.y || 0) + (lp.y || 0) + (cf.dy || 0);
+  const s = el.scale * ms * swapS * (fx.s ?? 1) * (lp.s ?? 1) * (cf.s ?? 1);
   const sx = s * (fx.sx ?? 1) * (cf.sx ?? 1), sy = s * (fx.sy ?? 1) * (cf.sy ?? 1);
-  const r = el.rot + (fx.r || 0) + (lp.r || 0) + (cf.r || 0);
+  const r = el.rot + mr + (fx.r || 0) + (lp.r || 0) + (cf.r || 0);
   const o = (fx.o ?? 1) * (lp.o ?? 1) * (el.spec.opacity ?? 1);
   if (el.anchor === 'none') n.style.transform = `translate(${(fx.x || 0) + (lp.x || 0)}px,${(fx.y || 0) + (lp.y || 0)}px)`;
   else {

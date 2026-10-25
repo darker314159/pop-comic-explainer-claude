@@ -6,6 +6,8 @@ usage: python3 tools/script2story.py projects/x/script.md [--out projects/x/stor
 """
 import argparse, json, re, sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import visualize
 
 BGS = ['cream', 'light-blue', 'cream-yellow', 'light-pink', 'light-green', 'cream-blue', 'light-yellow', 'paper']
 CAST = ['guy', 'girl', 'guy2', 'girl2', 'girl3', 'guy3']
@@ -58,7 +60,7 @@ def group(lines, per):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('script'); ap.add_argument('--out'); ap.add_argument('--per', type=int, default=3)
-    ap.add_argument('--max', type=int, default=18); ap.add_argument('--force', action='store_true')
+    ap.add_argument('--max', type=int, default=18); ap.add_argument('--force', action='store_true'); ap.add_argument('--no-visual', action='store_true', help='不自动加场景插画/意象道具')
     a = ap.parse_args()
     src = Path(a.script); out = Path(a.out) if a.out else src.with_name('story.json')
     if out.exists() and not a.force: sys.exit(f'❌ {out} 已存在（加 --force 覆盖）')
@@ -74,10 +76,12 @@ def main():
               'elements': [{'type': 'char', 'who': CAST[(i // 2) % len(CAST)], 'expr': 'neutral', 'acts': [{'at': 'L2' if len(g) > 1 else 'L1+0.6', 'expr': 'shock'}]}]}
         if i == 0 and (cover or title): sc['title'] = cover or title
         story['scenes'].append(sc)
+    nvis = visualize.apply(story) if not a.no_visual else 0   # imagery lexicon: place words -> set, objects/metaphors -> icon
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(story, ensure_ascii=False, indent=1), encoding='utf-8')
     n = sum(len(g) for g in scenes); chars = sum(len(re.sub(r'\W', '', l)) for g in scenes for l in g)
     print(f'✅ {out}：{len(scenes)} 个场景 / {n} 句 / {chars} 字（约 {chars / 4.5:.0f} 秒）')
+    print(f'🎨 按意象词典自动加了 {nvis} 处场景插画/道具（python3 tools/visualize.py 看每个场景的画面建议）')
     print('下一步：逐个场景把 title 的【待填】换成 4~8 字结论、给旁白加 [关键词]、按 scene-recipes.md 换主视觉，再运行 make.py --check')
 
 if __name__ == '__main__':

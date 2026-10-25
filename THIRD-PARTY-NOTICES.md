@@ -82,3 +82,12 @@ OFL 要求：不得单独售卖字体文件本体；修改后须沿用 OFL 并�
 - 本仓库只提供工具与模板，不产出内容成品；使用者对生成内容的合规性负责。
 - `config.json` 含 API Key，已在 `.gitignore` 中排除，**请勿提交**。
 - 本仓库不自动安装依赖，运行时需自行准备 ffmpeg / playwright / Python 包。
+- **`tools/publish.py` 会把成片上传到公共托管并生成公开下载链接**，`tools/make.py` 默认会调用它。
+  涉及商业内容或未发布素材时请加 `--no-publish`。
+
+## 版本记录
+
+| 版本 | 日期 | 变更 |
+|---|---|---|
+| v1.0 | 2026-10-25 | 首次收录（79 文件），混合许可结构建立 |
+| v1.1（claudepro） | 2026-10-25 | 上游大版本更新：84 文件。<br>**新增**：`engine/sets.js`（场景插画库，24KB）、`tools/imagery.py`（意象词典：地点/物品/抽象概念→画面）、`tools/visualize.py`（文案可视化助手，可 `--apply` 自动补 set/icon）、`tools/publish.py`（成片上传公共托管）、`references/visualization.md`、`references/img/sets.jpg`、`tools/dev/setsheet.py`。<br>**升级**：`SKILL.md` 15KB→18KB、`engine/engine.js`、`engine/icons.js` 12KB→28KB、`validate.py`、`scene-recipes.md`（32→42 个场景模板）、`components.md`。<br>**移除**：`tools/dev/_charsheet.html`、`tools/dev/_iconsheet.html`。<br>`copywriting/water-koubo/` 5 个文件**逐字节未变**，CC BY-NC 4.0 声明继续有效。 |

@@ -13,7 +13,8 @@ python3 tools/validate.py projects/xxx/story.json --describe
 - [ ] 标题 y 范围在 250~500，没有任何元素的 y 范围和它重叠？
 - [ ] 所有元素 x 在 40~1040、y 在 430~1400 之间？
 - [ ] 贴纸的框没有落在"角色脸"的框里？
-- [ ] 相邻两个场景的 bg 或角色不同？
+- [ ] 相邻两个场景的 bg/set 或角色不同？
+- [ ] 文案里的地点有 `set`、重要物品有道具 icon（`at:"w:物品"`）、至少 3 处 `move`/道具 `acts`？（`python3 tools/visualize.py s.json` 查看建议）
 
 ## B. 校验器报错 → 怎么改
 
@@ -36,6 +37,9 @@ python3 tools/validate.py projects/xxx/story.json --describe
 | `和上一个场景画面几乎一样` | 画面重复 | 换 bg / 换表情 / 加道具 |
 | `占位符（待填 / TODO / 【…】）` | script2story 生成的骨架没填完 | 把每个【待填】标题换成 4~8 字结论 |
 | `像在按点罗列` | 旁白里"第一/第二/第三""首先/其次"出现 ≥3 次，或 ≥3 张 PART 卡 | 改成因果推进 + 转折句；除非内容本身就是清单，否则删掉序号 |
+| `场景插画 xxx 不存在` | set 名拼错 | 用提示里的值（16 个，见 visualization.md） |
+| `move.to …` / `move 字段` | to 写错（不是坐标/位置名/角色 id） | `"to":[x,y]` 或 `"to":"bottom-right"`；相对移动用 `"by":[dx,dy]` |
+| `连续 3 个场景画面单调` / `道具场景不足` / `没有任何动作` | 画面太素 | 按 💡 画面建议：加 `set`、把物品/比喻画成 icon、用 `move`/`acts` 表现变化 |
 | `旁白里有括号` | MiMo 会把括号内容当语气指令读不出来 | 删掉括号；想改语气用该句的 `"style"` 字段 |
 
 ## C. 运行问题
@@ -59,6 +63,9 @@ python3 tools/validate.py projects/xxx/story.json --describe
 | 换配音员 | MiMo：`meta.voice` = `苏打`(男，默认) `白桦`(男，沉稳) `冰糖`(女) `茉莉`(女) 等；edge：`zh-CN-YunxiNeural`(男) `zh-CN-YunjianNeural`(男，浑厚) `zh-CN-XiaoxiaoNeural`(女) `zh-CN-XiaoyiNeural`(女，活泼) |
 | 语气不对（太播音腔/太平） | 改 `meta.ttsStyle`，例如"像跟朋友吐槽，语气夸张有起伏"；单句加 `"style":"惊讶"`，改完重跑 tts（缓存会自动失效） |
 | 某个词读错 | 该句写成 `{"text":"字幕写法","say":"配音读法"}` |
+| `❌ 所有托管都上传失败` | 网络/托管限流：`python3 tools/publish.py build/video.mp4 --host uguu`（或 gofile）重试；catbox 匿名被拒时在 config.json 填 `catbox_userhash` |
+| 下载链接过期 | litterbox 默认 72h（`--time 1h/12h/24h/72h`）、uguu 约 3 小时；重新跑 `publish.py` 即可得到新链接 |
+| 不想上传 | `make.py … --no-publish` |
 | 字幕某段太长 | 引擎按 ≤14 字自动分屏；仍嫌长就拆句 |
 
 ## D. 最终交付检查
@@ -68,3 +75,4 @@ python3 tools/validate.py projects/xxx/story.json --describe
 - [ ] 结尾金句回应开头（"关注"贴纸可选）
 - [ ] 用参考稿二创的：遵守了 water-koubo 规则（第一人称经历没写成用户亲历、没编造数字）
 - [ ] 把 `build/sheet.jpg` 一起交付给用户预览（可选）
+- [ ] 已在线发布：交付消息里有 `🔗` 下载链接（注明有效期），链接能打开（publish.py 会自动校验）
